@@ -8,8 +8,30 @@ export default class Galerie {
 	 */
 	static main() {
 		this.app = document.getElementById("app");
-		document.body.appendChild(this.dom_backdrop());
+		this.galerie = document.getElementById("galerie");
+		// document.body.appendChild(this.dom_backdrop());
+		this.ajouterClickImages();
 	}
+	/**
+	 * Ajoute à chacune des images un événement "click" pour afficher le backdrop
+	 * @static
+	 * @returns
+	 */
+	static ajouterClickImages() {
+		var desLiens = this.galerie.querySelectorAll("a");
+		desLiens = Array.from(desLiens);
+		for (let i = 0; i < desLiens.length; i += 1) {
+			let unLien = desLiens[i];
+			unLien.addEventListener("click", e => {
+				e.preventDefault();
+				var leLien = e.currentTarget;
+				console.log("On a cliqué sur un lien (image).", leLien.getAttribute("href"));
+			});
+		}
+	}
+	/**
+	 * Retourne la structure HTML d'un backdrop sans les variables.
+	 */
 	static dom_backdrop() {
 		// 	<div 
 		var resultat = document.createElement("div");
