@@ -24,10 +24,19 @@ export default class Galerie {
 			let unLien = desLiens[i];
 			unLien.addEventListener("click", e => {
 				e.preventDefault();
-				var leLien = e.currentTarget;
-				console.log("On a cliqué sur un lien (image).", leLien.getAttribute("href"));
+				var leLienCourant = e.currentTarget;
+				this.afficherBackdrop(leLienCourant);
 			});
 		}
+	}
+	static afficherBackdrop(lien) {
+		// On retire le backdrop existant s'il y en a un
+		if (this.backdrop) {
+			this.backdrop.parentNode.removeChild(this.backdrop);
+		}
+
+		this.backdrop = this.dom_backdrop();
+		document.body.appendChild(this.backdrop);
 	}
 	/**
 	 * Retourne la structure HTML d'un backdrop sans les variables.
