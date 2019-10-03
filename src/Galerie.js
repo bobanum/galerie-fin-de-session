@@ -52,43 +52,80 @@ export default class Galerie {
 	}
 	/**
 	 * Retourne la structure HTML d'un backdrop sans les variables.
+	 * @returns HTMLElement
 	 */
 	static dom_backdrop(lien) {
 		var adresse = lien.getAttribute("href");
 		var legende = lien.getAttribute("alt");
 		var resultat = document.createElement("div");
-		resultat.setAttribute("id", "backdrop");
-		var close = document.createElement("span");
-		close.classList.add("close");
-		close.innerHTML = "&#x2716;";
-		resultat.appendChild(close);
-		// Pour supprimer le backdrop (quand on clique dans le gris)
+		resultat.setAttribute("id", "backdrop")
+		var close = resultat.appendChild(this.dom_close());
+		var precedent = resultat.appendChild(this.dom_precedent());
+		var diapo = resultat.appendChild(this.dom_diapo(adresse, legende));
+		var suivant = resultat.appendChild(this.dom_suivant());
+		// Pour supprimer le backdrop quand on clique dans le gris
 		resultat.addEventListener("click", e => {
+			e.stopPropagation();
 			this.supprimerBackdrop();
 		});
-		var precedent = document.createElement("span");
-		precedent.classList.add("precedent");
-		precedent.innerHTML = "&#x276e;";
-		resultat.appendChild(precedent);
-		var diapo = document.createElement("figure");
-		diapo.classList.add("diapo");
-		resultat.appendChild(diapo);
+		return resultat;
+	}
+	/**
+	 * Retourne l'élément HTML du bouton close
+	 * @returns HTMLElement;
+	 */
+	static dom_close() {
+		var resultat = document.createElement("span");
+		resultat.classList.add("close");
+		resultat.innerHTML = "&#x2716;";
+		// Pour supprimer le backdrop quand on clique dans le bouton
+		resultat.addEventListener("click", e => {
+			e.stopPropagation();
+			this.supprimerBackdrop();
+		});
+		return resultat;
+	}
+	/**
+	 * Retourne l'élément HTML du bouton precedent
+	 * @returns HTMLElement;
+	 */
+	static dom_precedent() {
+		var resultat = document.createElement("span");
+		resultat.classList.add("precedent");
+		resultat.innerHTML = "&#x276e;";
+		return resultat;
+	}
+	/**
+	 * Retourne l'élément HTML du bouton suivant
+	 * @returns HTMLElement;
+	 */
+	static dom_suivant() {
+		var resultat = document.createElement("span");
+		resultat.classList.add("suivant");
+		resultat.innerHTML = "&#x276f;";
+		return resultat;
+	}
+	/**
+	 * Retourne l'élément HTML de la diapo <figure>
+	 * @param {string} adresse - L'Adresse de l'image
+	 * @param {string} legende - Le texte du figcaption
+	 * @returns HTMLElement;
+	 */
+	static dom_diapo(adresse, legende) {
+		var resultat = document.createElement("figure");
+		resultat.classList.add("diapo");
 		var image = document.createElement("img");
 		image.setAttribute("src", adresse);
 		image.setAttribute("alt", legende);
-		diapo.appendChild(image);
+		resultat.appendChild(image);
 		var figcaption = document.createElement("figcaption");
 		figcaption.innerHTML = legende;
-		diapo.appendChild(figcaption);
+		resultat.appendChild(figcaption);
 		// Pour éviter de supprimer le backdrop (quand on clique dans l'image')
-		diapo.addEventListener("click", e => {
+		resultat.addEventListener("click", e => {
 			e.stopPropagation();
 		});
-		var suivant = document.createElement("span");
-		suivant.classList.add("suivant");
-		suivant.innerHTML = "&#x276f;";
-		resultat.appendChild(suivant);
-		return resultat	;
+		return resultat;
 	}
 	/**
 	 * Méthode qui permet d'attendre le chargement de la page avant d'éxécuter le script principal
