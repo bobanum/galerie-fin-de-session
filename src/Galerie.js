@@ -35,13 +35,15 @@ export default class Galerie {
 			this.backdrop.parentNode.removeChild(this.backdrop);
 		}
 
-		this.backdrop = this.dom_backdrop();
+		this.backdrop = this.dom_backdrop(lien);
 		document.body.appendChild(this.backdrop);
 	}
 	/**
 	 * Retourne la structure HTML d'un backdrop sans les variables.
 	 */
-	static dom_backdrop() {
+	static dom_backdrop(lien) {
+		var adresse = lien.getAttribute("href");
+		var legende = lien.getAttribute("alt");
 		// 	<div 
 		var resultat = document.createElement("div");
 		// 	id="backdrop">
@@ -68,14 +70,14 @@ export default class Galerie {
 		// 	<img 
 		var image = document.createElement("img");
 		//  src="images/niche.jpg" 
-		image.setAttribute("src", "images/niche.jpg");
+		image.setAttribute("src", adresse);
 		//  alt="Chien dans sa niche" />
-		image.setAttribute("alt", "Chien dans sa niche");
+		image.setAttribute("alt", legende);
 		diapo.appendChild(image);
 		// 	<figcaption>
 		var figcaption = document.createElement("figcaption");
 		// 	Chien dans sa niche</figcaption>
-		figcaption.innerHTML = "Chien dans sa niche";
+		figcaption.innerHTML = legende;
 		diapo.appendChild(figcaption);
 		// 	</figure>
 		// 	<span 
