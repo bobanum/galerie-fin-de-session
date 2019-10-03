@@ -29,12 +29,24 @@ export default class Galerie {
 			});
 		}
 	}
-	static afficherBackdrop(lien) {
+	/**
+	 * Supprime le backdrop affiché
+	 */
+	static supprimerBackdrop() {
 		// On retire le backdrop existant s'il y en a un
 		if (this.backdrop) {
 			this.backdrop.parentNode.removeChild(this.backdrop);
+			this.backdrop = null;
 		}
-
+	}
+	/**
+	 * Affiche le backdrop en fonction du lien donné
+	 * S'assure de supprimer l'ancien backdrop
+	 */
+	static afficherBackdrop(lien) {
+		// On retire le backdrop existant s'il y en a un
+		this.supprimerBackdrop();
+		// On ajoute le nouveau backdrop en le gardant en mémoire
 		this.backdrop = this.dom_backdrop(lien);
 		document.body.appendChild(this.backdrop);
 	}
@@ -44,50 +56,38 @@ export default class Galerie {
 	static dom_backdrop(lien) {
 		var adresse = lien.getAttribute("href");
 		var legende = lien.getAttribute("alt");
-		// 	<div 
 		var resultat = document.createElement("div");
-		// 	id="backdrop">
 		resultat.setAttribute("id", "backdrop");
-		// 	<span 
 		var close = document.createElement("span");
-		// 	class="close">
 		close.classList.add("close");
-		// 	&#x2716;</span>
 		close.innerHTML = "&#x2716;";
 		resultat.appendChild(close);
-		// 	<span 
+		// Pour supprimer le backdrop (quand on clique dans le gris)
+		resultat.addEventListener("click", e => {
+			this.supprimerBackdrop();
+		});
 		var precedent = document.createElement("span");
-		// 	class="precedent">
 		precedent.classList.add("precedent");
-		// 	&#x276e;</span>
 		precedent.innerHTML = "&#x276e;";
 		resultat.appendChild(precedent);
-		// 	<figure 
 		var diapo = document.createElement("figure");
-		//  class="diapo">
 		diapo.classList.add("diapo");
 		resultat.appendChild(diapo);
-		// 	<img 
 		var image = document.createElement("img");
-		//  src="images/niche.jpg" 
 		image.setAttribute("src", adresse);
-		//  alt="Chien dans sa niche" />
 		image.setAttribute("alt", legende);
 		diapo.appendChild(image);
-		// 	<figcaption>
 		var figcaption = document.createElement("figcaption");
-		// 	Chien dans sa niche</figcaption>
 		figcaption.innerHTML = legende;
 		diapo.appendChild(figcaption);
-		// 	</figure>
-		// 	<span 
+		// Pour éviter de supprimer le backdrop (quand on clique dans l'image')
+		diapo.addEventListener("click", e => {
+			e.stopPropagation();
+		});
 		var suivant = document.createElement("span");
-		// 	class="suivant">
 		suivant.classList.add("suivant");
-		// 	&#x276f;</span>
 		suivant.innerHTML = "&#x276f;";
 		resultat.appendChild(suivant);
-		// </div>	
 		return resultat	;
 	}
 	/**
